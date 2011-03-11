@@ -20,6 +20,4 @@ def parse():
             end = info[len(info)-1]
             info[len(info)-1] = end[0:len(end)-1]
             cereals[info[0]] = info[1:]
-            
-            print info[0], cereals[info[0]]
-
+    return cereals
