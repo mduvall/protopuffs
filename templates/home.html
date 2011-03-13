@@ -1,0 +1,49 @@
+<html>
+  <head>
+	<title>{{ title }}</title>
+	<script type="text/javascript" src={{ static_url("script/protovis.js") }}></script>
+	<link href={{ static_url("css/main.css") }} rel='stylesheet' type='text/css' />
+	<link href='http://fonts.googleapis.com/css?family=Homemade+Apple' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+	  #viz {
+	    width: 600px;
+	    height:600px;
+	  }
+	</style>
+  </head>
+  <body>
+	<h1>milk&cereal</h1>
+
+	<div class="body-container">
+	  <div id="viz">
+		<script type="text/javascript+protovis">
+		  var cereals = {{ cereals }};
+		  var w = 800,
+		  h = 280,
+		  x = pv.Scale.linear(cereals, function(d) d.calories),
+		  y = pv.Scale.linear(0,1500).range(0,h),
+		  fill = pv.colors("lightpink", "darkgray", "lightblue");
+		  
+		  var vis = new pv.Panel()
+		  .width(w)
+		  .height(h)
+		  .margin(19.5)
+		  .right(40);
+		  
+		  vis.add(pv.Bar)
+		  .data(cereals)
+		  .width(20)
+		  .height(function(d) d.calories)
+		  .bottom(0)
+		  .left(function() this.index * 25)
+		  .anchor("top").add(pv.Label)
+		  .textStyle("white")
+		  .text(function(d) d.calories);
+		  
+		  vis.render();
+		</script>
+		
+	  </div>
+	</div>
+  </body>
+</html>

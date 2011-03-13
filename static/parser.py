@@ -13,7 +13,7 @@ symbol_table = { "A": "American Home Food Products",
 cereals = []
 
 def parse():
-    with open("static/data/cereal.csv", "r") as f:
+    with open("data/cereal.csv", "r") as f:
         for line in f:
             info = line.split(" ")
             info[0] = info[0].replace("_"," ")
@@ -26,16 +26,15 @@ def parse():
                 "temperature": info[2],
                 "calories": info[3],
                 "protein": info[4],
-                "fat":info[5],
-                "sodium": info[6],
-                "fiber": info[7],
-                "carbs": info[8],
-                "sugars": info[9],
-                "shelf": info[10],
-                "potassium": info[11],
-                "vitamins": info[12],
-                "weight": info[13],
-                "serving": info[14]
+                "sodium": info[5],
+                "fiber": info[6],
+                "carbs": info[7],
+                "sugars": info[8],
+                "shelf": info[9],
+                "potassium": info[10],
+                "vitamins": info[11],
+                "weight": info[12],
+                "serving": info[13]
              }
             cereals.append(cereal)
     return json.dumps(cereals)
