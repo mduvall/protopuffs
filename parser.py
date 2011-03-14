@@ -1,6 +1,6 @@
 # parses the csv file
 import json
-global symbol_table, cereals
+global symbol_table, cereals, count
 symbol_table = { "A": "American Home Food Products",
                  "G": "General Mills",
                  "K": "Kellogs",
@@ -11,8 +11,10 @@ symbol_table = { "A": "American Home Food Products",
                  "H": "Hot",
                  "C": "Cold" }
 cereals = []
-
+carb_fat_cereals = []
+circle_viz = {}
 def parse():
+    count = 0
     with open("static/data/cereal.csv", "r") as f:
         for line in f:
             info = line.split(" ")
@@ -24,18 +26,24 @@ def parse():
                 "name": info[0],
                 "manufacturer": info[1],
                 "temperature": info[2],
-                "calories": info[3],
-                "protein": info[4],
-                "fat":info[5],
+                "calories": float(info[3]),
+                "protein": float(info[4]),
+                "fat":float(info[5]),
                 "sodium": info[6],
                 "fiber": info[7],
-                "carbs": info[8],
+                "carbs": float(info[8]),
                 "sugars": info[9],
                 "shelf": info[10],
                 "potassium": info[11],
                 "vitamins": info[12],
                 "weight": info[13],
-                "serving": info[14]
+                "serving": info[14],
+                "index": count
              }
+            count+=1
+            if not (float(info[8]) == -1) and not (float(info[4]) == -1) and not (float(info[5]) == -1):
+                carb_fat_cereals.append(cereal)
             cereals.append(cereal)
-    return json.dumps(cereals)
+
+    print json.dumps(carb_fat_cereals, indent=4)
+    return [json.dumps(cereals), json.dumps(carb_fat_cereals)]

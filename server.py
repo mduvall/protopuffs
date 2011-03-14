@@ -3,8 +3,7 @@ import tornado.web
 import parser
 import os
 
-global cereals
-cereals = {}
+global cereals, circle_viz
 
 static = {
     "static_path": os.path.join(os.path.dirname(__file__), "static")
@@ -12,13 +11,15 @@ static = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/home.html",title="protopuffs",cereals=cereals)
+        self.render("templates/home.html",title="protopuffs",cereals=carb_fat_cereals)
 
 application = tornado.web.Application([
         (r"/", MainHandler),
 ], **static)
 
 if __name__ == "__main__":
-    cereals = parser.parse()
+    retval = parser.parse()
+    cereals = retval[0]
+    carb_fat_cereals = retval[1]
     application.listen(8080)
     tornado.ioloop.IOLoop.instance().start()

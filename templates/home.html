@@ -18,27 +18,60 @@
 	  <div id="viz">
 		<script type="text/javascript+protovis">
 		  var cereals = {{ cereals }};
-		  var w = 800,
-		  h = 280,
-		  x = pv.Scale.linear(cereals, function(d) d.calories),
-		  y = pv.Scale.linear(0,1500).range(0,h),
-		  fill = pv.colors("lightpink", "darkgray", "lightblue");
-		  
+		  cereals = cereals.sort(function(a,b) { return (a.fat*9) - (b.fat*9); });
+		  var w = 500,
+		      h = 1600,
+		      x = pv.Scale.linear(0, 500).range(0, w),
+              y = pv.Scale.ordinal(pv.range(77)).splitBanded(0, h, 4/5);
+
 		  var vis = new pv.Panel()
-		  .width(w)
-		  .height(h)
-		  .margin(19.5)
-		  .right(40);
+		      .width(w)
+		      .height(h)
+		      .left(200)
+		      .right(40);
+
+		  var bar = vis.add(pv.Bar)
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(d.calories) )
+		      .fillStyle("f28a00");
 		  
 		  vis.add(pv.Bar)
-		  .data(cereals)
-		  .width(20)
-		  .height(function(d) d.calories)
-		  .bottom(0)
-		  .left(function() this.index * 25)
-		  .anchor("top").add(pv.Label)
-		  .textStyle("white")
-		  .text(function(d) d.calories);
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(Math.max((d.protein+d.carbs)*4,d.fat*9)))
+		      .fillStyle(function(d) {
+		          if (d.fat == 5) { return "a68b07"; }
+		          if ((Math.max((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
+		              return "a68b07";
+		          } else {
+		              return "252f33";
+		          }
+		      })
+		  
+		  vis.add(pv.Bar)
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(Math.min((d.protein+d.carbs)*4,d.fat*9)))
+		      .fillStyle(function(d) {
+		          if (d.fat == 5) { return "252f33"; }
+		          if ((Math.min((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
+		              return "a68b07";
+		          } else {
+		              return "252f33";
+		          }
+		      })
+		  
+		  bar.anchor("left").add(pv.Label)
+		      .textMargin(5)
+		      .textAlign("right")
+		      .text(function(d) d.name);
 		  
 		  vis.render();
 		</script>
