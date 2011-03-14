@@ -4,6 +4,37 @@
 <div class="body-container">
   health factoid: an adult needs <em>20-35 grams of fiber</em> per day <br />
   health question: which manufacturer is putting in the fiber you need?<br />
+  hover and see which bowl of cereal will help you get your daily dose <br />
+  <p id="hover">calculations used 2.5 servings for breakfast meal for 20g/day</p>
+  <p id="hover">american home food products is 0 fiber!</p>
+  <div id="viz">
+	<script type="text/javascript+protovis">
+	  var cereals = {{ cereals }}
+	  cereals.shift();
+	  var w = 650, h = 200, r = w/2;
+	  var a = pv.Scale.linear(0,20).range(0,2*Math.PI);
+	  var vis = new pv.Panel()
+	      .def("i",-1)
+	      .width(w)
+	      .height(h)
+	      .top(175)
+	      .right(40);
 
+	  vis.add(pv.Wedge)
+	      .data(cereals)
+	      .innerRadius(function() this.index * 30 + 40)
+	      .outerRadius(function() this.index * 30 + 70)
+	      .top(100)
+	      .left(325)
+	      .startAngle(Math.PI)
+	      .angle(function(d) a(d.fiber*2.5))
+	      .event("mouseover", function() vis.i(this.index))
+	      .event("mouseout", function() vis.i(-1))
+	      .anchor("center").add(pv.Label)
+	      .font("12px Cabin")
+	      .text(function(d) d.name).textAngle(0)
+	      .visible(function() vis.i() == this.index);
+	  vis.render();
+	</script>
 </div>
 {% end %}

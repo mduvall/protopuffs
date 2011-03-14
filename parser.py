@@ -12,7 +12,7 @@ symbol_table = { "A": "American Home Food Products",
                  "C": "Cold" }
 cereals = []
 carb_fat_cereals = []
-fiber_cereals = []
+fiber_cereals = {}
 circle_viz = {}
 def parse():
     count = 0
@@ -45,8 +45,12 @@ def parse():
             if not (float(info[8]) == -1) and not (float(info[4]) == -1) and not (float(info[5]) == -1):
                 carb_fat_cereals.append(cereal)
             if not (float(info[7]) == -1):
-                fiber_cereals.append(cereal)
+                try:
+                    fiber_cereals[info[1]] = [fiber_cereals[info[1]][0]+float(info[7]),fiber_cereals[info[1]][1]+1]
+                except KeyError:
+                    fiber_cereals[info[1]] = [float(info[7]),1]
             cereals.append(cereal)
-
-    print json.dumps(carb_fat_cereals, indent=4)
-    return [json.dumps(cereals), json.dumps(carb_fat_cereals), json.dumps(fiber_cereals)]
+    meaned_fiber_cereals = []
+    for manu in fiber_cereals:
+        meaned_fiber_cereals.append({"name":manu, "fiber":(fiber_cereals[manu][0]/fiber_cereals[manu][1])})
+    return [json.dumps(cereals), json.dumps(carb_fat_cereals), json.dumps(meaned_fiber_cereals)]

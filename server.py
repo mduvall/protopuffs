@@ -19,7 +19,7 @@ class CalorieHandler(tornado.web.RequestHandler):
 
 class FiberHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/fiber.html",title="milk&cereal",cerals=fiber_cereals)
+        self.render("templates/fiber.html",title="milk&cereal",cereals=fiber_cereals)
         
 application = tornado.web.Application([
         (r"/", MainHandler),
