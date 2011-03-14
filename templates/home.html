@@ -4,6 +4,7 @@
 	<script type="text/javascript" src={{ static_url("script/protovis.js") }}></script>
 	<link href={{ static_url("css/main.css") }} rel='stylesheet' type='text/css' />
 	<link href='http://fonts.googleapis.com/css?family=Homemade+Apple' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
 	<style type="text/css">
 	  #viz {
 	    width: 600px;
@@ -13,70 +14,7 @@
   </head>
   <body>
 	<h1>milk&cereal</h1>
-
-	<div class="body-container">
-	  <div id="viz">
-		<script type="text/javascript+protovis">
-		  var cereals = {{ cereals }};
-		  cereals = cereals.sort(function(a,b) { return (a.fat*9) - (b.fat*9); });
-		  var w = 500,
-		      h = 1600,
-		      x = pv.Scale.linear(0, 500).range(0, w),
-              y = pv.Scale.ordinal(pv.range(77)).splitBanded(0, h, 4/5);
-
-		  var vis = new pv.Panel()
-		      .width(w)
-		      .height(h)
-		      .left(200)
-		      .right(40);
-
-		  var bar = vis.add(pv.Bar)
-		      .data(cereals)
-		      .top(function() y(this.index))
-		      .height(20)
-		      .left(0)
-		      .width(function(d) x(d.calories) )
-		      .fillStyle("f28a00");
-		  
-		  vis.add(pv.Bar)
-		      .data(cereals)
-		      .top(function() y(this.index))
-		      .height(20)
-		      .left(0)
-		      .width(function(d) x(Math.max((d.protein+d.carbs)*4,d.fat*9)))
-		      .fillStyle(function(d) {
-		          if (d.fat == 5) { return "a68b07"; }
-		          if ((Math.max((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
-		              return "a68b07";
-		          } else {
-		              return "252f33";
-		          }
-		      })
-		  
-		  vis.add(pv.Bar)
-		      .data(cereals)
-		      .top(function() y(this.index))
-		      .height(20)
-		      .left(0)
-		      .width(function(d) x(Math.min((d.protein+d.carbs)*4,d.fat*9)))
-		      .fillStyle(function(d) {
-		          if (d.fat == 5) { return "252f33"; }
-		          if ((Math.min((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
-		              return "a68b07";
-		          } else {
-		              return "252f33";
-		          }
-		      })
-		  
-		  bar.anchor("left").add(pv.Label)
-		      .textMargin(5)
-		      .textAlign("right")
-		      .text(function(d) d.name);
-		  
-		  vis.render();
-		</script>
-		
-	  </div>
-	</div>
+	{% block content %}
+	{% end %}
   </body>
 </html>

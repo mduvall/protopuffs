@@ -11,10 +11,16 @@ static = {
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/home.html",title="protopuffs",cereals=carb_fat_cereals)
+        self.render("templates/home.html",title="milk&cereal",cereals=carb_fat_cereals)
 
+class CalorieHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("templates/calorie.html",title="milk&cereal",cereals=carb_fat_cereals)
+
+        
 application = tornado.web.Application([
         (r"/", MainHandler),
+        (r"/calories",CalorieHandler),
 ], **static)
 
 if __name__ == "__main__":

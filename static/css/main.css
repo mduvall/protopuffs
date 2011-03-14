@@ -1,3 +1,7 @@
 body { }
 h1 { text-align:center; font-family:"Homemade Apple", arial; }
-div.body-container { width: 800px; margin:0 auto; }
+div.body-container { width: 630px; margin:0 auto; text-align:center; font-family:"Cabin"; }
+span.orange { height:1em; padding:0 10px; background:#f28a00; color:white; }
+span.green { height:1em; padding:0 10px;  background:#a68b07; color:white; }
+span.purple { height:1em; padding:0 10px; background:#252f33; color:white; }
+p#hover { margin:0; font-size:10px; }

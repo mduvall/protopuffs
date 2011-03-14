@@ -1,0 +1,88 @@
+{% extends "home.html" %}
+
+{% block content %}
+	<div class="body-container">
+	  where are the calories coming from?<br />
+	  <div>
+		<span class="orange">total</span>
+		<span class="green">carbs&protein</span>
+		<span class="purple">fat</span>
+	  </div>
+	  <p id="hover">hover for numbers (total/calories from carb+protein/calories from fat)</p>
+	  <div id="viz">
+		<script type="text/javascript+protovis">
+		  var cereals = {{ cereals }};
+		  cereals = cereals.sort(function(a,b) { return (a.fat*9) - (b.fat*9); });
+		  var w = 500,
+		      h = 1600,
+		      x = pv.Scale.linear(0, 250).range(0, w),
+              y = pv.Scale.ordinal(pv.range(77)).splitBanded(0, h, 4/5);
+
+		  var vis = new pv.Panel()
+		      .def("i",-1)
+		      .width(w)
+		      .height(h)
+		      .left(200)
+		      .right(40);
+
+		  var bar = vis.add(pv.Bar)
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(d.calories) )
+		      .fillStyle("f28a00")
+		  	  .event("mouseover",function() vis.i(this.index))
+		      .event("mouseout", function() vis.i(-1))
+		  
+		  var fat = vis.add(pv.Bar)
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(Math.max((d.protein+d.carbs)*4,d.fat*9)))
+		      .fillStyle(function(d) {
+		          if (d.fat == 5) { return "a68b07"; }
+		          if ((Math.max((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
+		              return "a68b07";
+		          } else {
+		              return "252f33";
+		          }
+		      })
+		      .event("mouseover",function() vis.i(this.index))
+		      .event("mouseout", function() vis.i(-1));
+		  
+		  var carb = vis.add(pv.Bar)
+		      .data(cereals)
+		      .top(function() y(this.index))
+		      .height(20)
+		      .left(0)
+		      .width(function(d) x(Math.min((d.protein+d.carbs)*4,d.fat*9)))
+		      .fillStyle(function(d) {
+		          if (d.fat == 5) { return "252f33"; }
+		          if ((Math.min((d.protein+d.carbs)*4,d.fat*9)) == ((d.protein+d.carbs)*4)) {
+		              return "a68b07";
+		          } else {
+		              return "252f33";
+		          }
+		      })
+		      .event("mouseover",function() vis.i(this.index))
+		      .event("mouseout", function() vis.i(-1));
+		  
+		  bar.anchor("left").add(pv.Label)
+		      .textMargin(5)
+		      .textAlign("right")
+		      .text(function(d) d.name);
+		  
+		  bar.anchor("right").add(pv.Label)
+		      .textAlign("right")
+		      .visible(function() vis.i() == this.index)
+		  	  .text(function(d) d.calories + "/" + (d.protein+d.carbs)*4 + "/" + d.fat*9)
+		      .textStyle("white");
+
+		  vis.render();
+		</script>
+		
+	  </div>
+	</div>
+{% end %}
