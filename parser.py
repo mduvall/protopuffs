@@ -12,6 +12,7 @@ symbol_table = { "A": "American Home Food Products",
                  "C": "Cold" }
 cereals = []
 carb_fat_cereals = []
+fiber_cereals = []
 circle_viz = {}
 def parse():
     count = 0
@@ -30,7 +31,7 @@ def parse():
                 "protein": float(info[4]),
                 "fat":float(info[5]),
                 "sodium": info[6],
-                "fiber": info[7],
+                "fiber": float(info[7]),
                 "carbs": float(info[8]),
                 "sugars": info[9],
                 "shelf": info[10],
@@ -43,7 +44,9 @@ def parse():
             count+=1
             if not (float(info[8]) == -1) and not (float(info[4]) == -1) and not (float(info[5]) == -1):
                 carb_fat_cereals.append(cereal)
+            if not (float(info[7]) == -1):
+                fiber_cereals.append(cereal)
             cereals.append(cereal)
 
     print json.dumps(carb_fat_cereals, indent=4)
-    return [json.dumps(cereals), json.dumps(carb_fat_cereals)]
+    return [json.dumps(cereals), json.dumps(carb_fat_cereals), json.dumps(fiber_cereals)]
