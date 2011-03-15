@@ -1,0 +1,66 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div class="body-container">
+  we all want the vitamins, and we all want to keep daily salt intake between 1800-2400 mg <br />
+  weighing the two at breakfast is hard after waking up, let's examine this visually <br />
+  <div id="viz">
+	<script type="text/javascript+protovis">
+	  var cereals = {{ cereals }};
+	  var w = 400, h = 400, x = pv.Scale.linear(0,300).range(0,w), y = pv.Scale.linear(0,100).range(0,h);
+	  var c = pv.Scale.linear(0,100).range("red","green");
+
+	  var vis = new pv.Panel().width(w).height(h).bottom(30).left(40).top(20).right(20)
+	      .def("i",-1)
+	      .events("all")
+	      .events("mousemove", pv.Behavior.point());
+
+	  vis.add(pv.Label)
+	      .data(["% of FDA recommended daily intake"])
+	      .left(-20)
+	      .bottom(h/2)
+	      .font("10pt Cabin")
+	      .textAlign("center")
+	      .textAngle(-Math.PI/2);
+
+	  vis.add(pv.Label)
+	      .data(["Sodium (mg/serving)"])
+	      .bottom(-25)
+	      .left(200)
+	      .textAlign("center")
+	      .font("10pt Cabin");
+	  
+	  vis.add(pv.Rule)
+	      .data(y.ticks())
+	      .bottom(y)
+	      .strokeStyle(function(d) d ? "#eee" : "#000")
+	      .anchor("left").add(pv.Label)
+	      .visible(function() 1)
+	      .text(y.tickFormat);
+
+	  vis.add(pv.Rule)
+	      .data(x.ticks())
+	      .left(x)
+	      .strokeStyle(function(d) d ? "#eee" : "#000")
+	      .anchor("bottom").add(pv.Label)
+	      .visible(function() 1)
+          .text(x.tickFormat);
+	  
+	  vis.add(pv.Dot)
+	      .def("active", -1)
+	      .data(cereals)
+	      .left(function(d) x(d.sodium))
+	      .bottom(function(d) y(d.vitamins))
+	      .strokeStyle(function(d) c(d.vitamins))
+	      .fillStyle(function() this.strokeStyle().alpha(.2))
+	      .event("mouseover", function() vis.i(this.index))
+	      .event("mouseout", function() vis.i(-1))
+	      .anchor("top").add(pv.Label)
+	      .font("10px Cabin")
+	      .visible(function() vis.i() == this.index)
+	      .text(function(d) d.name);
+	  
+	 vis.render();
+	</script>
+</div>
+{% end %}
