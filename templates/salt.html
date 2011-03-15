@@ -4,6 +4,7 @@
 <div class="body-container">
   we all want the vitamins, and we all want to keep daily salt intake between 1800-2400 mg <br />
   weighing the two at breakfast is hard after waking up, let's examine this visually <br />
+  <p id="hover">hover to see which cereal will do your body good!</p>
   <div id="viz">
 	<script type="text/javascript+protovis">
 	  var cereals = {{ cereals }};
@@ -16,7 +17,7 @@
 	      .events("mousemove", pv.Behavior.point());
 
 	  vis.add(pv.Label)
-	      .data(["% of FDA recommended daily intake"])
+	      .data(["% of FDA recommended daily vitamin intake"])
 	      .left(-20)
 	      .bottom(h/2)
 	      .font("10pt Cabin")
